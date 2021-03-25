@@ -33,12 +33,12 @@ public class UserController {
   }
 
   @PutMapping("/users/{id}")
-  public void createUser(@PathVariable(value = "id") Long id, @RequestBody User user) {
+  public void updateUser(@PathVariable(value = "id") Long id, @RequestBody User user) {
     userRepository.save(user);
   }
 
   @DeleteMapping("/users/{id}")
-  public void createUser(@PathVariable(value = "id") Long id) {
+  public void deleteUser(@PathVariable(value = "id") Long id) {
     userRepository.deleteById(id);
   }
 }
