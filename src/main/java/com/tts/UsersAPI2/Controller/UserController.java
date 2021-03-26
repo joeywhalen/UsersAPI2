@@ -3,7 +3,6 @@ package com.tts.UsersAPI2.Controller;
 import com.tts.UsersAPI2.Model.User;
 import com.tts.UsersAPI2.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -20,16 +19,20 @@ public class UserController {
   private UserRepository userRepository;
 
   @GetMapping("/users")
-  public List<User> getUsers(@RequestParam(value = "state", required = false) String state) {
+  public ResponseEntity<List<User>> getUsers(@RequestParam(value = "state", required = false) String state) {
     if (state != null) {
-      return (List<User>) userRepository.findByState(state);
+      return new ResponseEntity<>((List<User>) userRepository.findByState(state), HttpStatus.OK);
     }
-    return (List<User>) userRepository.findAll();
+    return new ResponseEntity<>((List<User>) userRepository.findAll(), HttpStatus.OK);
   }
 
   @GetMapping("/users/{id}")
-  public Optional<User> getUserById(@PathVariable(value = "id") Long id) {
-    return userRepository.findById(id);
+  public ResponseEntity<Optional<User>> getUserById(@PathVariable(value = "id") Long id) {
+    Optional<User> user = userRepository.findById(id);
+    if (!user.isPresent()) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+    return new ResponseEntity<>(user, HttpStatus.OK);
   }
 
   @PostMapping("/users")
@@ -42,12 +45,26 @@ public class UserController {
   }
 
   @PutMapping("/users/{id}")
-  public void updateUser(@PathVariable(value = "id") Long id, @RequestBody User user) {
+  public ResponseEntity<Void> updateUser(@PathVariable(value = "id") Long id, @RequestBody User user,
+                                         BindingResult bindingResult) {
+    Optional<User> existingUser = userRepository.findById(id);
+    if (!existingUser.isPresent()) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+    if (bindingResult.hasErrors()) {
+      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
     userRepository.save(user);
+    return new ResponseEntity<>(HttpStatus.OK);
   }
 
   @DeleteMapping("/users/{id}")
-  public void deleteUser(@PathVariable(value = "id") Long id) {
+  public ResponseEntity<Void> deleteUser(@PathVariable(value = "id") Long id) {
+    Optional<User> existingUser = userRepository.findById(id);
+    if (!existingUser.isPresent()) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
     userRepository.deleteById(id);
+    return new ResponseEntity<>(HttpStatus.OK);
   }
 }
