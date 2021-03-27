@@ -16,8 +16,8 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
-@RestController
 @Api(value = "users", description = "Methods for Creating, Getting, Updating, and Deleting users")
+@RestController
 @RequestMapping("/v2")
 public class UserControllerV2 {
   @Autowired
