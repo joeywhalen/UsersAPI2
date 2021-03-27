@@ -23,7 +23,7 @@ public class SwaggerConfiguration {
     return new Docket(DocumentationType.SWAGGER_2)
             .groupName("Version 1")
             .select()
-            .apis(RequestHandlerSelectors.basePackage("com.tts.usersapi2"))
+            .apis(RequestHandlerSelectors.basePackage("com.tts.UsersAPI2"))
             .paths(PathSelectors.ant("/v1/**"))
             .build()
             .apiInfo(buildApiInfoV1());
@@ -45,7 +45,7 @@ public class SwaggerConfiguration {
     return new Docket(DocumentationType.SWAGGER_2)
             .groupName("Version 2")
             .select()
-            .apis(RequestHandlerSelectors.basePackage("com.tts.usersapi2"))
+            .apis(RequestHandlerSelectors.basePackage("com.tts.UsersAPI2"))
             .paths(PathSelectors.ant("/v2/**"))
             .build()
             .apiInfo(buildApiInfoV2());
