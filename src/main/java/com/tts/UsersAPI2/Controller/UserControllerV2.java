@@ -24,13 +24,14 @@ public class UserControllerV2 {
   private UserRepository userRepository;
 
   @ApiOperation(value = "Endpoint to get all users", response = User.class, responseContainer = "List")
-  @ApiResponses(value = {@ApiResponse(code = 200, message = "Got all users")})
+  @ApiResponses(value = {@ApiResponse(code = 200, message = "Got all users"),
+                        @ApiResponse(code = 400, message = "Must include the state")})
   @GetMapping("/users")
-  public ResponseEntity<List<User>> getUsers(@RequestParam(value = "state", required = false) String state) {
+  public ResponseEntity<List<User>> getUsers(@RequestParam(value = "state", required = true) String state) {
     if (state != null) {
       return new ResponseEntity<>((List<User>) userRepository.findByState(state), HttpStatus.OK);
     }
-    return new ResponseEntity<>((List<User>) userRepository.findAll(), HttpStatus.OK);
+    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
   }
 
   @ApiOperation(value = "Endpoint to get a single user by id", response = User.class)
