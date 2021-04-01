@@ -14,6 +14,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 public class User {
+  //Checking oon a push to GitHub issue
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @ApiModelProperty(notes = "This is the user id")
